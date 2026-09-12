@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->unsignedBigInteger('harga');
             $table->text('deskripsi')->nullable();
-            $table->boolean('is_active')->default('true');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

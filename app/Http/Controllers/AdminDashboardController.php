@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAdmin;
+use App\Models\Pesanan;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,8 @@ class AdminDashboardController extends Controller
      */
     public function index()
     {
-        //
+        $dataTiket = Pesanan::all();
+        return view('admin.index', compact('dataTiket'));
     }
 
     /**
