@@ -11,7 +11,8 @@ class LandingController extends Controller
      */
     public function index()
     {
-        return view('index');
+        $dataTiket = 
+        return view('landing');
     }
 
     /**

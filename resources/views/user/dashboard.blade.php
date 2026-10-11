@@ -7,6 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>Ini Dashboard user</h1>
 </body>
 </html>

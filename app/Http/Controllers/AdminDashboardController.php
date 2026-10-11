@@ -15,7 +15,7 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $dataTiket = Pesanan::all();
-        return view('admin.index', compact('dataTiket'));
+        return view('admin.dashboard', compact('dataTiket'));
     }
 
     /**
