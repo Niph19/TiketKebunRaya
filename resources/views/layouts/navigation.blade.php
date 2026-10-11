@@ -12,6 +12,9 @@
 
             {{-- Desktop nav --}}
             <div class="hidden sm:flex sm:items-center sm:gap-1">
+                <x-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                    Beranda
+                </x-nav-link>
                 <x-nav-link
                     :href="Auth::user()->role === 'admin' ? route('admin.index') : route('dashboard.index')"
                     :active="request()->routeIs('dashboard.*', 'admin.*')"
@@ -58,6 +61,9 @@
     {{-- Mobile menu --}}
     <div :class="{'block': open, 'hidden': !open}" class="hidden border-t border-slate-100 sm:hidden">
         <div class="space-y-1 px-4 pb-3 pt-2">
+            <x-responsive-nav-link :href="route('index')" :active="request()->routeIs('index')">
+                Beranda
+            </x-responsive-nav-link>
             <x-responsive-nav-link
                 :href="Auth::user()->role === 'admin' ? route('admin.index') : route('dashboard.index')"
                 :active="request()->routeIs('dashboard.*', 'admin.*')"

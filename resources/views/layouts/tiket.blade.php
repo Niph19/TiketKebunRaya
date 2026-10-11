@@ -24,6 +24,13 @@
             </a>
 
             <nav class="flex items-center gap-2 text-sm" aria-label="Navigasi utama">
+                <a href="{{ route('index') }}" @class([
+                    'rounded-lg px-3 py-2 font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700',
+                    'bg-emerald-50 text-emerald-900' => request()->routeIs('index'),
+                    'text-emerald-800 hover:bg-emerald-50' => ! request()->routeIs('index'),
+                ]) @if (request()->routeIs('index')) aria-current="page" @endif>
+                    Beranda
+                </a>
                 @auth
                     @if (Auth::user()->role === 'admin')
                         <a href="{{ route('admin.index') }}" class="rounded-lg px-3 py-2 font-semibold text-emerald-800 hover:bg-emerald-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700">Dashboard Admin</a>
