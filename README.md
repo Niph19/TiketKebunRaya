@@ -7,6 +7,48 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Tiket Kebun Raya
+
+Aplikasi ini menyediakan pemesanan tiket kunjungan kebun raya, pembayaran manual dengan unggah bukti, konfirmasi admin, dan unduhan e-ticket PDF dengan QR code.
+
+### Menjalankan secara lokal
+
+1. Instal dependensi:
+
+   ```bash
+   composer install
+   npm install
+   ```
+
+2. Salin `.env.example` menjadi `.env`, lalu isi konfigurasi database dan rekening pembayaran:
+
+   ```dotenv
+   TICKET_PAYMENT_BANK=
+   TICKET_PAYMENT_ACCOUNT=
+   TICKET_PAYMENT_NAME=
+   ```
+
+3. Siapkan aplikasi:
+
+   ```bash
+   php artisan key:generate
+   php artisan migrate --seed
+   npm run build
+   php artisan serve
+   ```
+
+   Seeder menyediakan akun lokal untuk admin dan pengunjung. Gunakan kredensial yang didefinisikan di `database/seeders/DatabaseSeeder.php` dan ganti sebelum aplikasi digunakan di lingkungan produksi.
+
+### Alur penggunaan
+
+- Admin mengelola jenis tiket dan harga pada menu **Jenis Tiket**.
+- Pengunjung membuat pesanan untuk tanggal kunjungan, memilih jumlah tiket dewasa/anak, lalu membayar sesuai instruksi.
+- Setelah bukti pembayaran diunggah, pesanan berstatus **menunggu konfirmasi**.
+- Admin memeriksa bukti lalu menyetujui atau menolak pembayaran.
+- Setelah disetujui, pengunjung dapat mengunduh PDF berisi invoice, data kunjungan, rincian tiket, status lunas, dan QR unik. Unduhan hanya diizinkan untuk pemilik pesanan yang sudah lunas.
+
+Uji fitur menggunakan `php artisan test`. File bukti pembayaran dibatasi ke JPG, PNG, atau PDF dengan ukuran maksimum 2 MB dan disimpan pada disk lokal privat.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

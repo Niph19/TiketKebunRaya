@@ -12,7 +12,7 @@ class PesananTiket extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->role === 'user';
     }
 
     /**
@@ -23,7 +23,10 @@ class PesananTiket extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'jenis_tiket_id' => ['required', 'integer', 'exists:jenis_tikets,id'],
+            'tanggal_kunjungan' => ['required', 'date', 'after_or_equal:today'],
+            'jumlah_dewasa' => ['required', 'integer', 'min:0', 'max:20'],
+            'jumlah_anak' => ['required', 'integer', 'min:0', 'max:20'],
         ];
     }
 }

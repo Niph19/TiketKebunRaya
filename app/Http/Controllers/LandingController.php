@@ -12,7 +12,8 @@ class LandingController extends Controller
      */
     public function index()
     {
-        $dataTiket = JenisTiket::all();
+        $dataTiket = JenisTiket::where('is_active', true)->latest()->get();
+
         return view('landing', compact('dataTiket'));
     }
 

@@ -2,70 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAdmin;
 use App\Models\Pesanan;
-use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class AdminDashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): View
     {
-        $dataTiket = Pesanan::all();
-        return view('admin.dashboard', compact('dataTiket'));
+        $pesanans = Pesanan::with(['user', 'jenisTiket'])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.dashboard', compact('pesanans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function showProof(Pesanan $pesanan)
     {
-        //
+        abort_unless($pesanan->bukti_pembayaran !== null, 404);
+        abort_unless(Storage::disk('local')->exists($pesanan->bukti_pembayaran), 404);
+
+        return response()->file(Storage::disk('local')->path($pesanan->bukti_pembayaran));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAdmin $request)
+    public function approve(Pesanan $pesanan): RedirectResponse
     {
-        $request->validated();
+        if ($pesanan->status !== 'menunggu_konfirmasi' || ! $pesanan->bukti_pembayaran) {
+            return back()->with('error', 'Pesanan belum memiliki bukti pembayaran yang menunggu konfirmasi.');
+        }
 
-        User::create($request->all());
-        return redirect('admindashboard')->with('success', 'Admin create berhasil dibuat.');
+        $pesanan->update([
+            'status' => 'lunas',
+            'kode_tiket' => $pesanan->kode_tiket ?? (string) Str::uuid(),
+        ]);
+
+        return back()->with('success', 'Pembayaran berhasil dikonfirmasi. E-ticket sekarang tersedia untuk pengunjung.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function reject(Pesanan $pesanan): RedirectResponse
     {
-        //
-    }
+        if ($pesanan->status !== 'menunggu_konfirmasi' || ! $pesanan->bukti_pembayaran) {
+            return back()->with('error', 'Pesanan ini tidak sedang menunggu konfirmasi.');
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $pesanan->update(['status' => 'ditolak']);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('success', 'Pembayaran ditolak. Pengunjung dapat mengunggah bukti pembayaran kembali.');
     }
 }
