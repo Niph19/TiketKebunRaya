@@ -8,6 +8,7 @@ class Pesanan extends Model
 {
     protected $fillable = [
         'kode_invoice',
+        'jenis_tiket_id',
         'user_id',
         'tanggal_kunjungan',
         'jumlah_dewasa',
@@ -20,9 +21,9 @@ class Pesanan extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
-    public function detail()
+
+    public function jenisTiket()
     {
-        return $this->hasMany(DetailPesanan::class);
+        return $this->belongsTo(JenisTiket::class);
     }
 }

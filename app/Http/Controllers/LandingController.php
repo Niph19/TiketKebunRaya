@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JenisTiket;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -11,8 +12,8 @@ class LandingController extends Controller
      */
     public function index()
     {
-        $dataTiket = 
-        return view('landing');
+        $dataTiket = JenisTiket::all();
+        return view('landing', compact('dataTiket'));
     }
 
     /**
